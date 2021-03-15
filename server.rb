@@ -186,7 +186,7 @@ def openid
       add_sreg(oidreq, oidresp) # add the sreg response if requested
       add_pape(oidreq, oidresp) # ditto pape
     elsif oidreq.immediate
-      server_url = "/"
+      server_url = "#{SERVER_CONF[:prefix]}"
       oidresp = oidreq.answer(false, server_url)
     else
       session[:last_oidreq] = oidreq
