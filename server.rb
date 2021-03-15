@@ -68,7 +68,6 @@ def user_page(username)
 <meta http-equiv="X-XRDS-Location" content="#{xrds_url}" />
 <link rel="openid.server" href="#{server_url}" />
 <link rel="openid2.provider" href="#{server_url}" />
-<link rel="openid2.local_id" href="#{xrds_url}" />
 </head><body><p>OpenID identity page for #{username}</p>
 </body></html>
 EOS
