@@ -1,0 +1,21 @@
+OAUTH_CONF = {
+  client_id: "openid",
+  client_secret: "<CLIENT_SECRET>",
+  authorization_endpoint: "https://oauth.example/oauth2/auth",
+  token_endpoint: "https://oauth.example/oauth2/token",
+  scope: "profile openid"
+}
+
+USERNAME_MAPPING = {
+  userinfo_endpoint: "https://oauth.example/userinfo",
+  username_attribute: "username"
+}
+
+SERVER_CONF = {
+  bind: "0.0.0.0",
+  port: 20280,
+  prefix: "/",
+  base_url: nil, # nil for auto guess
+  session_secret: nil # nil for auto generation each boot
+}
+
