@@ -185,7 +185,7 @@ def openid
     elsif is_authorized(identity, oidreq.trust_root)
       oidresp = oidreq.answer(true, nil, identity)
 
-      add_sreg(oidreq, oidresp) # add the sreg response if requested
+      add_sreg(oidreq, oidresp, :restore) # add the sreg response if requested
       add_pape(oidreq, oidresp) # ditto pape
     elsif oidreq.immediate
       server_url = "#{SERVER_CONF[:prefix]}"
@@ -211,19 +211,16 @@ def oauth_redirect
   )
 end
 
-def add_sreg(oidreq, oidresp)
+def add_sreg(oidreq, oidresp, userinfo={})
   # check for Simple Registration arguments and respond
   sregreq = OpenID::SReg::Request.from_openid_request(oidreq)
 
   return if sregreq.nil?
-  # In a real application, this data would be user-specific,
-  # and the user should be asked for permission to release
-  # it.
-  sreg_data = {
-    'nickname' => session[:username],
-    'fullname' => 'Mayor McCheese',
-    'email' => 'mayor@example.com'
-  }
+  sreg_data = if userinfo == :restore
+                session[:last_sreg]
+              else
+                session[:last_sreg] = userinfo.slice(*USERNAME_MAPPING[:openid_pass_attributes]).merge({'nickname' => session[:username]})
+              end
 
   sregresp = OpenID::SReg::Response.extract_response(sregreq, sreg_data)
   oidresp.add_extension(sregresp)
@@ -233,7 +230,7 @@ def add_pape(oidreq, oidresp)
   papereq = OpenID::PAPE::Request.from_openid_request(oidreq)
   return if papereq.nil?
   paperesp = OpenID::PAPE::Response.new
-  paperesp.nist_auth_level = 0 # we don't even do auth at all!
+  paperesp.nist_auth_level = 0 # 0 should be no problem ?
   oidresp.add_extension(paperesp)
 end
 
@@ -283,7 +280,7 @@ def oauth_callback
     session[:approvals] = [oidreq.trust_root]
   end
   oidresp = oidreq.answer(true, nil, identity)
-  add_sreg(oidreq, oidresp)
+  add_sreg(oidreq, oidresp, userinfo)
   add_pape(oidreq, oidresp)
   return render_response(oidresp)
 end

@@ -3,12 +3,13 @@ OAUTH_CONF = {
   client_secret: "<CLIENT_SECRET>",
   authorization_endpoint: "https://oauth.example/oauth2/auth",
   token_endpoint: "https://oauth.example/oauth2/token",
-  scope: "profile openid"
+  scope: "profile openid email"
 }
 
 USERNAME_MAPPING = {
   userinfo_endpoint: "https://oauth.example/userinfo",
-  username_attribute: "username"
+  username_attribute: "username",
+  openid_pass_attributes: ["fullname", "email"]
 }
 
 SERVER_CONF = {
