@@ -56,7 +56,7 @@ end
 
 def user_page(username)
   xrds_url = "#{user_url(username)}"
-  server_url = "/"
+  server_url = "#{SERVER_CONF[:prefix]}"
 
   headers({
     'X-XRDS-Location' => xrds_url
@@ -81,8 +81,8 @@ def user_xrds(username)
 end
 
 def idp_page
-  xrds_url = "/"
-  server_url = "/"
+  xrds_url = "#{SERVER_CONF[:prefix]}"
+  server_url = "#{SERVER_CONF[:prefix]}"
 
   headers({
     'X-XRDS-Location' => xrds_url
