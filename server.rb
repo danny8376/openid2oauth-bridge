@@ -107,7 +107,7 @@ end
 def render_xrds(types)
   content_type :xrds
 
-  server_url = "#{base_url}"
+  server_url = "#{base_url}#{SERVER_CONF[:prefix]}"
 
 <<EOS
 <?xml version="1.0" encoding="UTF-8"?>
@@ -132,7 +132,7 @@ end
 
 def server
   if $server.nil?
-    server_url = "#{base_url}"
+    server_url = "#{base_url}#{SERVER_CONF[:prefix]}"
     $server = Server.new(store, server_url)
   end
   $server
@@ -140,7 +140,7 @@ end
 
 def oauth
   if $oauth.nil?
-    redirect_uri = "#{base_url}"
+    redirect_uri = "#{base_url}#{SERVER_CONF[:prefix]}"
     $oauth = Rack::OAuth2::Client.new(OAUTH_CONF.merge({
       identifier: OAUTH_CONF[:client_id],
       secret: OAUTH_CONF[:client_secret],
