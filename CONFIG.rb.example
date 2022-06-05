@@ -15,7 +15,7 @@ USERNAME_MAPPING = {
 SERVER_CONF = {
   bind: "0.0.0.0",
   port: 20280,
-  prefix: "/",
+  prefix: "",
   base_url: nil, # nil for auto guess
   session_secret: nil # nil for auto generation each boot
 }

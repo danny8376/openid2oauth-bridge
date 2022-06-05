@@ -3,6 +3,7 @@
 require 'securerandom'
 require 'json'
 require 'sinatra'
+require 'sinatra/namespace'
 require 'thin'
 require 'openid'
 require 'openid/extensions/sreg'
@@ -25,24 +26,26 @@ configure do
 end
 
 # ==== Routes ====
-get "#{SERVER_CONF[:prefix]}", provides: :html do
-  openid
-end
+namespace SERVER_CONF[:prefix] do
+  get "/", provides: :html do
+    openid
+  end
 
-get "#{SERVER_CONF[:prefix]}", provides: :xrds do
-  idp_xrds
-end
+  get "/", provides: :xrds do
+    idp_xrds
+  end
 
-post "#{SERVER_CONF[:prefix]}" do
-  openid
-end
+  post "/" do
+    openid
+  end
 
-get "#{SERVER_CONF[:prefix]}:username", provides: :html do |username|
-  user_page username
-end
+  get "/:username", provides: :html do |username|
+    user_page username
+  end
 
-get "#{SERVER_CONF[:prefix]}:username", provides: :xrds do |username|
-  user_xrds username
+  get "/:username", provides: :xrds do |username|
+    user_xrds username
+  end
 end
 
 # ==== Methods ====
