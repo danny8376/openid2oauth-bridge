@@ -51,7 +51,7 @@ end
 # ==== Methods ====
 def user_url(username = session[:username])
   return "no_identity" if not username or username == ""
-  "#{base_url}#{SERVER_CONF[:prefix]}#{username}"
+  "#{base_url}#{SERVER_CONF[:prefix]}/#{username}"
 end
 
 def base_url
@@ -60,7 +60,7 @@ end
 
 def user_page(username)
   xrds_url = "#{user_url(username)}"
-  server_url = "#{SERVER_CONF[:prefix]}"
+  server_url = "#{SERVER_CONF[:prefix]}/"
 
   headers({
     'X-XRDS-Location' => xrds_url
@@ -86,8 +86,8 @@ def user_xrds(username)
 end
 
 def idp_page
-  xrds_url = "#{SERVER_CONF[:prefix]}"
-  server_url = "#{SERVER_CONF[:prefix]}"
+  xrds_url = "#{SERVER_CONF[:prefix]}/"
+  server_url = "#{SERVER_CONF[:prefix]}/"
 
   headers({
     'X-XRDS-Location' => xrds_url
@@ -112,7 +112,7 @@ end
 def render_xrds(types)
   content_type :xrds
 
-  server_url = "#{base_url}#{SERVER_CONF[:prefix]}"
+  server_url = "#{base_url}#{SERVER_CONF[:prefix]}/"
 
 <<EOS
 <?xml version="1.0" encoding="UTF-8"?>
@@ -137,7 +137,7 @@ end
 
 def server
   if $server.nil?
-    server_url = "#{base_url}#{SERVER_CONF[:prefix]}"
+    server_url = "#{base_url}#{SERVER_CONF[:prefix]}/"
     $server = Server.new(store, server_url)
   end
   $server
@@ -145,7 +145,7 @@ end
 
 def oauth
   if $oauth.nil?
-    redirect_uri = "#{base_url}#{SERVER_CONF[:prefix]}"
+    redirect_uri = "#{base_url}#{SERVER_CONF[:prefix]}/"
     $oauth = Rack::OAuth2::Client.new(OAUTH_CONF.merge({
       identifier: OAUTH_CONF[:client_id],
       secret: OAUTH_CONF[:client_secret],
@@ -191,7 +191,7 @@ def openid
       add_sreg(oidreq, oidresp, :restore) # add the sreg response if requested
       add_pape(oidreq, oidresp) # ditto pape
     elsif oidreq.immediate
-      server_url = "#{SERVER_CONF[:prefix]}"
+      server_url = "#{SERVER_CONF[:prefix]}/"
       oidresp = oidreq.answer(false, server_url)
     else
       session[:last_oidreq] = oidreq
